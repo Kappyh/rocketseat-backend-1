@@ -1,4 +1,3 @@
-const { request } = require("express");
 const express = require("express");
 const { uuid } = require("uuidv4");
 const app = express();
@@ -6,6 +5,18 @@ const app = express();
 app.use(express.json());
 
 const projects = [];
+
+function logRequests(request,response,next){
+  const { method, url } = request;
+
+  const logLabel = `[${method.toUpperCase()} ${url}]`;
+
+  console.info(logLabel);
+
+  return next();
+}
+
+app.use(logRequests);
 
 app.get("/projects", (request, response) => {
   const { title } = request.query;
